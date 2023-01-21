@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="{{ url_for('static', filename='js/synms.js') }}" ></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+</head>
+<body>
+  <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <img src="https://cdn.frankerfacez.com/emoticon/438528/4" alt="" srcset="" width="50px" height="50px">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-item nav-link active" href="/">Новости<span class="sr-only">(current)</span></a>
+          <a class="nav-item nav-link active" href="/facts">Факты</a>
+          <a class="nav-item nav-link active" href="/w2v">Синонимы</a>
+        </div>
+      </div>
+    </nav>
+  </div>
+    <div class="container">
+        <h1 class="text-center">Поиск контекстных синонимов</h1>
+        <input class="form-control" id="word" type="text" placeholder="Введите слово для поиска контекстного синонима">
+        <p class="text-justify">Может занять несколько минут, если введеного слова нету в базе.</p>
+        <button type="button" id = "syn" class="btn btn-success btn-lg btn-block">Поиск</button>
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              
+              <th scope="col">Синоним</th>
+              
+            </tr>
+          </thead>
+          <tbody>
+            
+
+  
+      
+          </tbody>
+        </table>
+    </div>
+
+
+</body>
+</html>

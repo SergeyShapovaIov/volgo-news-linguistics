@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="{{ url_for('static', filename='js/news.js') }}" ></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+</head>
+<body>
+  <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-item nav-link active" href="/">Новости<span class="sr-only">(current)</span></a>
+          <a class="nav-item nav-link active" href="/facts">Факты</a>
+          <a class="nav-item nav-link active" href="/w2v">Синонимы</a>
+        </div>
+      </div>
+    </nav>
+  </div>
+    <div class="container">
+      <h1 class="text-center">Новости с сайта</h1> <a class="text-center" href="https://novostivolgograda.ru/" target="_blank" ><h1>novostivolgograda.ru</h1></a></p>
+    <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Title</th>
+            <th scope="col">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for message in news %}
+          <tr>
+            <th scope="row" class = "rows">{{loop.index0 +1 }}</th>
+            <td><a href="news/{{message._id}}">{{message.newsName}}</a></td>
+            <td>{{message.newsDate}}</td>
+            
+          </tr>
+
+          {% endfor %}
+        </tbody>
+      </table>
+      <button type="button" id="more"class="btn btn-info btn-lg btn-block">Еще....</button>
+    </div>
+   
+</body>
+</html>

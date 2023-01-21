@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+</head>
+<body>
+  <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <img src="https://i.imgur.com/MjyddId.png" alt="" srcset="" width="50px" height="50px">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-item nav-link active" href="/">Новости<span class="sr-only">(current)</span></a>
+          <a class="nav-item nav-link active" href="/facts">Факты</a>
+          <a class="nav-item nav-link active" href="/w2v">Синонимы</a>
+        </div>
+      </div>
+    </nav>
+  </div>
+    <div class="container">
+        <p class="text-center">{{news.newsName}}<a href="{{news.newsLink}}" target="_blank" >(ссылка)</a></p>
+        <p class="text-justify">{{news.newsText}}</p>
+        <p class="text-right">{{news.newsDate}}</p>
+          {% if facts != 0 %}
+              {% for fact in facts%}
+                {{loop.index0+1}}. {{fact}}({{tonal[loop.index0]}})<br>
+              {% endfor %}
+          {% else %}
+              Фактов нет
+          {% endif %}
+    </div>
+
+
+</body>
+</html>

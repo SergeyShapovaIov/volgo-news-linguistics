@@ -1,13 +1,15 @@
 from dostoevsky.tokenization import RegexTokenizer
 from dostoevsky.models import FastTextSocialNetworkModel
 from pymongo import MongoClient
+import pymongo
 import re
 
 def main():
-    client = MongoClient('45.11.24.111', username='mongo-root', password='passw0rd', authSource='admin')
-    db = client.news
-    data = db.analysis
-    result = data.find({u'forTonality': True})
+    client = pymongo.MongoClient(
+        "mongodb+srv://mongo-root:passw0rd@cluster0.qkh3grh.mongodb.net/?retryWrites=true&w=majority")
+    db = client.test
+    coll = db['analyses']
+    result = coll.find({u'forTonality': True})
     mas = []
     # добавление к analysis поля 'forTonality' чтобы одно и то же не считывать
     # for res in result:
@@ -29,7 +31,7 @@ def main():
         id = arrays['_id']
         messages = arrays['newsWithMention']
         result = getTonality(messages)
-        db.tonality.update({u'_id': id, u'tonality': result}, { u'$setOnInsert': { u'_id': id, u'tonality': result} }, **{ 'upsert': True })
-        data.update({u'_id': id}, { u'$set': { u'forTonality': False} }, **{ 'upsert': True })
+        db['tonality'].update({u'_id': id, u'tonality': result}, { u'$setOnInsert': { u'_id': id, u'tonality': result} }, **{ 'upsert': True })
+        coll.update({u'_id': id}, { u'$set': { u'forTonality': False} }, **{ 'upsert': True })
     
     print('Провека тональносьт завершена')

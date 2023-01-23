@@ -1,15 +1,22 @@
 
 PATH = 'model/kurs_model/'
 
+from dbtext import newsToText
 from pyspark.sql import SparkSession
 from pyspark.ml.feature import Word2VecModel
 from pprint import pprint
+import pymongo
 import os
+
+client = pymongo.MongoClient("mongodb+srv://mongo-root:passw0rd@cluster0.qkh3grh.mongodb.net/?retryWrites=true&w=majority")
+db = client.test
+coll = db['news']
+
 if (not os.path.exists('model')):
     if (not os.path.exists('data_text')):
         print("Папка создана")
         os.mkdir('data_text')
-    newsToText(db.data)
+    newsToText(db['news'])
 test_words = ["алимов","бочаров"]
 
 spark = SparkSession \

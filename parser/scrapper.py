@@ -36,7 +36,7 @@ async def main():
 
     # Прогрузка всех компонентов, которые необходимо распарсиить
     countPage = 0
-    while countPage < 1:
+    while countPage < 10:
         await page.evaluate('window.scrollBy(0, document.body.scrollHeight)')
         countPage += 1
         time.sleep(1)
@@ -47,6 +47,7 @@ async def main():
         newsLinks.append('https://novostivolgograda.ru' + await page.evaluate('(element) => element.getAttribute("href")', linkObject))
 
     # Сбор недостающей информации
+    indexLink = 0
     for link in newsLinks:
 
         # Перехлд на страницу с новостью
@@ -74,15 +75,50 @@ async def main():
         if(title == ''):
             title = await page.evaluate('document.evaluate("//h1[contains(@class, \'MatterTopNoImage_title\')]",document.body, null, XPathResult.STRING_TYPE, null).stringValue')
         titles.append(title)
-
-    # Закрытие клиента браузера
-    await browser.close()
+        print(indexLink);
+        indexLink += 1
 
     # Отправка всех данных на кластер MongoDB
     for i in range(0, len(newsLinks)):
-        coll.insert_one({"newsDate": dates[i], "newsName": titles[i], "newsLink": newsLinks[i] , "newsText" : texts[i]})
+        coll.insert_one({"newsDate": dates[i], "newsName": titles[i], "newsLink": newsLinks[i] , "newsText" : texts[i], "forAnalysis": True})
         # data.update({u'newsDate': dates[i], u'newsName': titles[i], u'newsLink': newsLinks[i], u'newsText': texts[i]}, { u'$setOnInsert': { u'newsDate': dates[i], u'newsName': titles[i], u'newsLink': newsLinks[i], u'newsText': texts[i], u'forAnalysis': True } }, **{ 'upsert': True })
         print(str(i) + "  update")
+
+    # Парсим сайты достопримичательностей
+
+    await page.goto('https://avolgograd.com/sights?obl=vgg', {'waitUntil': 'domcontentloaded'})
+
+    attractionsNames = []
+
+    await page.evaluate('window.scrollBy(0, document.body.scrollHeight)')
+    time.sleep(1)
+    await page.evaluate('document.getElementById(\'true-loadmore\').click()')
+    await page.evaluate('window.scrollBy(0, document.body.scrollHeight)')
+    time.sleep(1)
+    attractionsObjectsAll = await page.querySelectorAll('.ta-211 a')
+
+    for attractionsObject in attractionsObjectsAll:
+        name = await page.evaluate('(element) => element.textContent', attractionsObject);
+        attractionsNames.append(name);
+
+    coll = db['attractions']
+    for name in attractionsNames:
+        coll.insert_one({"attractionsNames": name})
+        print(str(i) + "  update attraction")
+
+    # #Парсим сайт персон
+    #
+    # await page.goto('https://global-volgograd.ru/person', {'waitUntil': 'domcontentloaded'})
+    #
+    # await page.screenshot({'path': "screenshot.png"})
+    # pagesLinks = await page.querySelectorAll('.pager-list .pager-item')
+    #
+    # personObjects = await page.querySelectorAll('.person-text .title')
+    #
+    # for personObject in personObjects:
+    #     personName = await page.evaluate('(element) => element.textContent', personObject)
+    #     print(personName)
+
 
 def run():
     try:

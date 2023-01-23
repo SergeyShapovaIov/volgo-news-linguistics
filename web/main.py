@@ -59,7 +59,7 @@ def news_id(id):
 
 @app.route('/facts/')
 def facts():
-    return render_template('facts.html', facts=db.analysis.find().limit(15))
+    return render_template('facts.html', facts=coll.find().limit(15))
 
 @app.route('/w2v/')
 def synonyms():

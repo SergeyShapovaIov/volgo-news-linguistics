@@ -1,23 +1,32 @@
-encoding "utf8";
+encoding "utf8"; // указываем кодировку, в которой написан конфигурационный файл
 
 TTextMinerConfig {
-	Dictionary = "./tomita/dic.gzt";
-	PrettyOutput = "./tomita/pretty.html";
+  Dictionary = "mydic.gzt"; // путь к корневому словарю
+  
+  //PrettyOutput = "PrettyOutput.html"; // путь к файлу с отладочным выводом в удобном для чтения виде
 
-	Input = {
-		File = "./tomita/input.txt";
-	}
+  Input = {
+    File = "input.txt"; // путь к входному файлу
+    
+  }
 
-	Output = {
-		File = "./tomita/output.txt";
-		Format = text;
-	}
+  Articles = [
+    { 
+      Name = "персоны"
+    },
+    { Name = "достопримечательности" }
+    
 
-Articles = [
-		{ Name = "grammar" }
-	]
+  ]
 
-Facts = [
-		{ Name = "Fact" }
-	]
+  Facts = [
+    { Name = "Person"},
+    { Name = "Attractions"}
+  ]
+
+  Output = {
+  //  File = "facts.txt";
+    Format = text;        // можно использовать следующие форматы:
+                          // proto (Google Protobuf), xml, text
+  }
 }

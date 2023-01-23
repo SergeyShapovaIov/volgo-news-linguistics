@@ -6,13 +6,17 @@ import json
 from bson.objectid import ObjectId
 import datetime
 import sys
-print(sys.path)
-sys.path.append("..\word2vec\\")
+sys.path.append("../word2vec/")
 print(sys.path)
 from mainw2v import main as getSynms
 app = Flask(__name__)
-client = MongoClient('45.11.24.111', username='mongo-root', password='passw0rd', authSource='admin')
-db = client.news
+
+# client = MongoClient(host='localhost',port=27017, username='mongo-root', password='passw0rd', authSource='admin')
+# db = client.news
+
+client = pymongo.MongoClient("mongodb+srv://mongo-root:passw0rd@cluster0.qkh3grh.mongodb.net/?retryWrites=true&w=majority")
+db = client.test
+coll = db['news']
 
 class JSONEncoder(json.JSONEncoder):
     def default(self, o):
@@ -21,7 +25,7 @@ class JSONEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, o)
 
 
-def skiplimit(db, collection, page_size, page_num):
+def skiplimit(db, page_size, page_num):
     """returns a set of documents belonging to page number `page_num`
     where size of each page is `page_size`.
     """
@@ -29,7 +33,7 @@ def skiplimit(db, collection, page_size, page_num):
     skips = page_size * (page_num - 1)
 
     # Skip and limit
-    cursor = db[collection].find().sort("_id", pymongo.DESCENDING).skip(skips).limit(page_size)
+    cursor = db.find({}).sort("newsDate", pymongo.DESCENDING).skip(skips).limit(page_size)
 
     # Return documents
     return [x for x in cursor]
@@ -39,7 +43,7 @@ def skiplimit(db, collection, page_size, page_num):
 
 @app.route('/')
 def index():
-    return render_template('index.html', news=db.data.find().sort("_id", pymongo.DESCENDING).limit(10))
+    return render_template('index.html', news=coll.find({}).sort("newsDate", pymongo.DESCENDING).limit(10))
 @app.route('/news/<id>/')
 def news_id(id):
     
@@ -63,7 +67,7 @@ def synonyms():
 
 @app.route('/api/getNews/<page_num>/', methods=['GET'])
 def get_news(page_num):
-    news = skiplimit(db,"data", 10,int(page_num))
+    news = skiplimit(coll,10,int(page_num))
     result = JSONEncoder().encode(news)
     return jsonify(result)
 
@@ -86,4 +90,4 @@ def get_synm(word):
 
 # jsonify
 if __name__ == "__main__":
-    app.run(host='0.0.0.0',debug=False)
+    app.run(host='localhost',port=4200,debug=False)

@@ -1,8 +1,10 @@
-from run import create_w2v_model
+from w2v import create_w2v_model
 from dbtext import newsToText
+import pymongo
 
-client = MongoClient('45.11.24.111', username='mongo-root', password='passw0rd', authSource='admin')
-db = client.news
+client = pymongo.MongoClient("mongodb+srv://mongo-root:passw0rd@cluster0.qkh3grh.mongodb.net/?retryWrites=true&w=majority")
+db = client.test
+coll = db['news']
 
-newsToText(db.data)
+newsToText(coll)
 create_w2v_model()
